@@ -1,0 +1,20 @@
+<div class="product-template">
+  <div class="container">
+    {% render 'breadcrumb' %}
+    <div class="halo-product-content">
+      <div class="row pro-page">
+        {% section 'product-template' %}
+      </div>
+    </div>
+    {% section 'products_bundle_discount' %}
+  </div>
+  {% section 'tab-horizontal'%}
+  {% if settings.option_descript_pr == "all_product" %}
+    {% section 'description_product_detail' %}
+  {% else %}
+    <div id="different_product_des" data-product-handle = "{{product.handle}}"></div>
+  {% endif %}
+  {% section 'product-recommendations' %}
+  {% section 'recently-viewed-products' %}
+  
+</div>
