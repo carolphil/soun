@@ -1,0 +1,120 @@
+{% comment %}
+List out your main-menu linklist (default)
+More info on linklists:
+- http://docs.shopify.com/themes/liquid-variables/linklists
+{% endcomment %}
+
+<ul class="site-nav">
+    {% if section.settings.horizontal_linklist != blank %}
+    {% assign menu = linklists[section.settings.horizontal_linklist].links %}
+    {% else %}
+    {% assign menu = linklists.main-menu.links %}
+    {% endif %}
+
+    {% for link in menu %}
+
+    {% assign i = forloop.index | downcase %}
+    {% assign cat = link.title | handleize %}
+
+    {% if section.settings.enable_sale %}
+        {% assign sale_item = section.settings.sale_item | split:"," | strip | downcase | handle %}
+        {% assign sale = link.title | downcase | handle  %}
+    {% endif %}
+
+    {% if section.settings.enable_new %}
+        {% assign new_item = section.settings.new_item | split:"," | strip | downcase | handle %}
+        {% assign new = link.title | downcase | handle  %}
+    {% endif %}
+
+    {% if section.settings.enable_hot %}
+        {% assign hot_item = section.settings.hot_item | split:"," | strip | downcase | handle %}
+        {% assign hot = link.title | downcase | handle  %}
+    {% endif %}
+
+    <li class="menu-lv-1 item {%if link.url contains '#'%}nav_id{% endif %} {% if linklists[link.handle] != empty %} dropdown{% if is_megamenu %} mega-menu{% else %} no-mega-menu {% endif %}{% endif %}">
+        <a class="{%if linklists[link.handle] != empty %}menu__moblie {% endif %}{% if link.active %}current{% endif %}"  href="{{ link.url }}">
+            {% render 'multilang' with link.title %}
+            {% if sale_item contains sale %}
+            <label class="icon-label icon_sale">
+                {% render 'multilang' with section.settings.lb_sale %}
+            </label>
+            {% endif %}
+
+            {% if new_item contains new %}
+            <label class="icon-label icon_new">
+                {% render 'multilang' with section.settings.lb_new %}
+            </label>
+            {% endif %}
+
+            {% if hot_item contains hot %}
+            <label class="icon-label icon_hot">
+                {% render 'multilang' with section.settings.lb_hot %}
+            </label>
+            {% endif %}
+        </a>
+      {% if linklists[link.handle] != empty %}
+      <span class="icon-dropdown" data-toggle-menu-mb>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </span>
+      {% endif %}
+
+        {% if linklists[link.handle] != empty %}
+        <div class="sub-menu-mobile menu-mb-translate">
+            <div class="menu-mb-title">
+                <span class="icon-dropdown back-submenu">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </span>
+                {% render 'multilang' with link.title %}
+            </div>
+
+        {% comment %}
+        Check if menu item is Mega menu
+        {% endcomment %}
+
+            {% assign link_child = link.handle %}
+
+            {% if linklists[link.handle] != empty %}
+            {% render 'dropdown-menu',link_child: link_child, link_for_dropdown: link %}
+            {% endif %}
+        </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+<style>
+/*  Label - Navigation  */
+    {% assign bg_lb_sale = section.settings.bg_lb_sale %}
+    {% assign color_lb_sale = section.settings.color_lb_sale %}
+    {% assign bg_lb_new = section.settings.bg_lb_new %}
+    {% assign color_lb_new = section.settings.color_lb_new %}
+    {% assign bg_lb_hot = section.settings.bg_lb_hot %}
+    {% assign color_lb_hot = section.settings.color_lb_hot %}
+
+    .nav-bar  .icon_sale:before {
+        border-top-color: {{ bg_lb_sale }};
+    }
+
+    .nav-bar  .icon_new:before {
+        border-top-color: {{ bg_lb_new }};
+    }
+
+    .nav-bar  .icon_hot:before {
+        border-top-color: {{ bg_lb_hot }};
+    }
+    .nav-bar  .icon_sale {
+        background-color: {{ bg_lb_sale }};
+        color: {{ color_lb_sale }};
+    }
+        
+    .nav-bar  .icon_new {
+        background-color: {{ bg_lb_new }};
+        color: {{ color_lb_new }};
+    }
+        
+    .nav-bar  .icon_hot {
+        background-color: {{ bg_lb_hot }};
+        color: {{ color_lb_hot }};
+    }
+
+</style>

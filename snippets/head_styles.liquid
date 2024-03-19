@@ -1,0 +1,9 @@
+
+{{ 'vendor.min.css' | asset_url | stylesheet_tag }}
+{{ 'theme-style.css' | asset_url | stylesheet_tag }}
+{{ 'theme-styles-responsive.css' | asset_url | stylesheet_tag }}
+{% if template contains 'blog' or template contains 'article' %}
+ {{ 'blog-style.css' | asset_url | stylesheet_tag }}
+{% endif %}
+{{ 'theme-styles-update.css' | asset_url | stylesheet_tag }}
+
